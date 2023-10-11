@@ -7,10 +7,11 @@ previous_price = None
 alert_status = False
 return_response = ''
 current_price = None
+price_difference = 0.0
 
 
 def go_am():
-    global previous_price, alert_status, return_response
+    global previous_price, alert_status, return_response, price_difference, current_price
 
     url = 'http://goldandsilver.am/'
     r = requests.get(url)
@@ -51,7 +52,7 @@ def go_am():
         print("Failed to retrieve the webpage.")
         alert_status = False  # Reset alert status on error
 
-    return return_response, current_price
+    return return_response, current_price, round(price_difference, 2)
 
 
 if __name__ == '__main__':

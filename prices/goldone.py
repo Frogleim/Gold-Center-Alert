@@ -6,10 +6,11 @@ previous_price = None
 alert_status = False
 return_response = None
 current_price = None
+price_difference = 0.0
 
 
 def get_price():
-    global previous_price, alert_status, return_response, current_price
+    global previous_price, alert_status, return_response, current_price, price_difference
 
     url = 'https://goldone.am/get_rates'
 
@@ -60,7 +61,7 @@ def get_price():
         alert_status = False
         return_response = None
 
-    return return_response, current_price
+    return return_response, current_price, round(price_difference, 2)
 
 
 if __name__ == '__main__':
