@@ -7,6 +7,7 @@ alert_status = False
 return_response = None
 current_price = None
 price_difference = 0.0
+price_threshold = 0.1
 
 
 def get_price():
@@ -35,39 +36,30 @@ def get_price():
     if response.status_code == 200:
         data = response.json()
         current_price = data['rates'][0]['amount_buy_1']
-        print(f"Current GolOne Gold Price: ${current_price}")
-
+        current_price = round(current_price, 3)
         if previous_price is not None:
-            price_difference = float(current_price) - float(previous_price)
-            if abs(price_difference) >= 0.1:
-                if price_difference > 0:
-                    print("Gold GolOne price increased by 0.1 or more.")
-                    alert_status = True
-                    return_response = 'Up'
-                else:
-                    print("Gold GolOne price decreased by 0.1 or more.")
-                    alert_status = True
-                    return_response = 'Down'
+            price_difference = current_price - previous_price
+            if price_difference >= price_threshold:
+                return_response = "Price goes up"
+                alert_status = True
+            elif price_difference < -price_threshold:
+                return_response = "Price goes down"
+                alert_status = True
             else:
+                return_response = "Price is stable"
                 alert_status = False
-                return_response = None
-        else:
-            alert_status = False
-            return_response = None
+
         previous_price = current_price
 
     else:
-        print(f"Failed to retrieve data. Status code: {response.status_code}")
         alert_status = False
         return_response = None
-
-    return return_response, current_price, round(price_difference, 2)
+    return price_difference, current_price
 
 
 if __name__ == '__main__':
     while True:
-        alert, response = get_price()
-        print(response)
-        if alert:
-            print(f"Alert: Price change detected ({response}).")
+        curr, prev = get_price()
+        print(curr)
+        print(prev)
         time.sleep(10)

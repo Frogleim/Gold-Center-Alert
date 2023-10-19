@@ -1,13 +1,13 @@
-import time
-
 import yfinance as yf
+import time
+from dataclasses import dataclass
 
-# Create a ticker object for gold (XAU/USD)
 previous_price = None
 alert_status = False
 return_response = ''
 current_price = None
 price_difference = 0.0
+price_threshold = 0.1
 
 
 def get_price():
@@ -20,39 +20,33 @@ def get_price():
         gold_price = round(float(gold_data['Close'].iloc[-1]), 1)
         gold_price = gold_price / 31.1
 
-        if gold_price:
-            current_price = round(gold_price, 1)
-            print(f"Current World Gold Price: ${current_price}")
+        if previous_price is not None:
 
-            if previous_price is not None:
-                price_difference = float(current_price) - float(previous_price)
-                if abs(price_difference) >= 0.1:
-                    if price_difference > 0:
-                        print("World Gold price increased by 0.1 or more.")
-                        alert_status = True
-                        return_response = 'Up'
+            price_difference = gold_price - previous_price
 
-                    else:
-                        print("World Gold price decreased by 0.1 or more.")
-                        alert_status = True
-                        return_response = 'Down'
-
-                else:
-                    alert_status = False  # Reset alert status if no alert
+            print(f'Prices difference: {price_difference}')
+            if price_difference >= price_threshold:
+                return_response = "Price goes up"
+                alert_status = True
+            elif price_difference < -price_threshold:
+                return_response = "Price goes down"
+                alert_status = True
             else:
+                return_response = "Price is stable"
                 alert_status = False
-            previous_price = current_price
+
+        previous_price = gold_price
 
     else:
         print("Could not fetch live gold price data.")
         alert_status = False  # Reset alert status on error
+    return price_difference, current_price
 
-    return return_response, current_price, round(price_difference, 2)
+
 
 
 if __name__ == '__main__':
     while True:
-        alert = get_price()
-        if alert:
-            print("Alert: Price change detected.")
+        cur, diff = get_price()
+        print(diff)
         time.sleep(10)

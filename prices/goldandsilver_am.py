@@ -3,12 +3,13 @@ from bs4 import BeautifulSoup as BS
 import time
 
 # Initialize the previous price and alert status
+
 previous_price = None
 alert_status = False
 return_response = ''
 current_price = None
 price_difference = 0.0
-
+price_threshold = 0.1
 
 def go_am():
     global previous_price, alert_status, return_response, price_difference, current_price
@@ -26,33 +27,29 @@ def go_am():
 
             if all(prices):
                 current_price = prices[1]
-                print(f"Current GoldandSilver Gold Price: ${current_price}")
 
                 if previous_price is not None:
                     price_difference = float(current_price) - float(previous_price)
-                    if abs(price_difference) >= 0.1:
-                        if price_difference > 0:
-                            print("Gold GoldandSilver price increased by 0.1 or more.")
-                            alert_status = True
-                            return_response = 'Up'
-
-                        else:
-                            print("Gold GoldandSilver price decreased by 0.1 or more.")
-                            alert_status = True
-                            return_response = 'Down'
-
+                    if price_difference >= price_threshold:
+                        return_response = "Price goes up"
+                        alert_status = True
+                    elif price_difference < -price_threshold:
+                        return_response = "Price goes down"
+                        alert_status = True
                     else:
-                        alert_status = False  # Reset alert status if no alert
-                else:
-                    alert_status = False
+                        return_response = "Price is stable"
+                        alert_status = False
 
                 previous_price = current_price
+            else:
+                print("Table not found on the webpage.")
 
     else:
         print("Failed to retrieve the webpage.")
         alert_status = False  # Reset alert status on error
 
-    return return_response, current_price, round(price_difference, 2)
+
+    return price_difference, current_price
 
 
 if __name__ == '__main__':
