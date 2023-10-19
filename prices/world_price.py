@@ -40,7 +40,7 @@ def get_price():
     else:
         print("Could not fetch live gold price data.")
         alert_status = False  # Reset alert status on error
-    return price_difference, current_price
+    return price_difference, gold_price
 
 
 
