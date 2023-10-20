@@ -14,8 +14,8 @@ def get_prices():
 
     try:
         r = requests.get(url)
-        price = r.json()['data'][0]['buy']
-
+        price = r.json()['data'][0]['sell']
+        print(r.json())
         if previous_gold_center_price is not None:
             price_difference = price - previous_gold_center_price
             if price_difference >= price_threshold:
@@ -35,7 +35,4 @@ def get_prices():
 
 
 if __name__ == '__main__':
-    while True:
-        price = get_prices()
-        print(price)
-        time.sleep(10)
+    get_prices()
