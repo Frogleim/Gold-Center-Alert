@@ -44,7 +44,7 @@ service_count = 0
 
 @app.on_message(filters.command(["start"]))
 def start_handler(client: "Client", message: "types.Message"):
-    chat_id = 5517438705
+    chat_id = -4086530854
     client.send_message(chat_id, 'Starting to send messages!')
     while True:
         go_am_price_difference, current_go_am = goldandsilver_am.go_am()
