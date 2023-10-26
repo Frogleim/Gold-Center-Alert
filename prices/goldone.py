@@ -35,7 +35,8 @@ def get_price():
 
     if response.status_code == 200:
         data = response.json()
-        current_price = data['rates'][0]['amount_buy_1']
+        print(data)
+        current_price = data['rates'][0]['amount_sell_1']
         current_price = round(current_price, 3)
         if previous_price is not None:
             price_difference = current_price - previous_price

@@ -26,7 +26,8 @@ def go_am():
             prices = [td.get_text() for i, td in enumerate(td_elements) if i < 3]
 
             if all(prices):
-                current_price = prices[1]
+                current_price = prices[2]
+                print(current_price)
 
                 if previous_price is not None:
                     price_difference = float(current_price) - float(previous_price)
