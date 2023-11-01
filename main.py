@@ -27,6 +27,8 @@ DC_MAP = {
 
 def create_app():
     _app = Client("redirect_bot",
+                  '25264213',
+                  'cbcd2efa0b73666b48af032714d86a73',
                   bot_token='6676961848:AAHfGFa7QCjt4hZB-QlD6PtkZVEPomQnt7M')
     if PROXY:
         _app.proxy = dict(
