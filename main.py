@@ -49,7 +49,7 @@ def start_handler(client: "Client", message: "types.Message"):
     chat_id = -4086530854
     client.send_message(chat_id, 'Starting to send messages!')
     while True:
-        go_am_price_difference, current_go_am = goldandsilver_am.go_am()
+        goldandsilver_am_difference, goldandsilver_am_current = goldandsilver_am.go_am()
         world_price_difference, world_current = world_price.get_price()
         gold_one_price_difference, gold_one_current = goldone.get_price()
         world_price_bool = False
@@ -58,7 +58,7 @@ def start_handler(client: "Client", message: "types.Message"):
         gold_center_difference, gold_center_price = gc_price.get_prices()
 
         print(f'World prices is: {world_current} {world_price_difference}'
-              f'Gold and Silver prices is: {current_go_am} {go_am_price_difference}'
+              f'Gold and Silver prices is: {goldandsilver_am_current} {goldandsilver_am_difference}'
               f'GoldOne price is: {gold_one_current} {gold_one_price_difference}')
 
         # World price alert
@@ -81,7 +81,7 @@ def start_handler(client: "Client", message: "types.Message"):
         #
         # else:
         #     print('World Prices doesnt changed')
-        # # Gold and Silver price alert
+        # # GoldONE price alert
 
         if gold_one_price_difference >= 0.1:
             print('GoldOne price changed!')
@@ -96,27 +96,27 @@ def start_handler(client: "Client", message: "types.Message"):
             gold_am_bool = True
             client.send_message(
                 chat_id,
-                f'🐸{round(gold_one_current, 1)}(🔻 -{round(go_am_price_difference, 1)}$)'
+                f'🐸{round(gold_one_current, 1)}(🔻 -{round(gold_one_price_difference, 1)}$)'
             )
 
         else:
             print('GoldOne Prices doesnt changed')
-        # Gold One price alert
+        # Gold and Silver price alert
 
-        if go_am_price_difference >= 0.1:
+        if goldandsilver_am_difference >= 0.1:
             print('Gold and Silver price changed!')
             gold_and_silver_bool = True
             client.send_message(
                 chat_id,
-                f'💩{round(gold_one_current, 1)}(✅ +{round(gold_one_price_difference, 1)}$)'
+                f'💩{round(goldandsilver_am_current, 1)}(✅ +{round(goldandsilver_am_difference, 1)}$)'
             )
 
-        elif go_am_price_difference < -0.1:
+        elif goldandsilver_am_difference < -0.1:
             print('Gold and Silver price goes down')
             gold_and_silver_bool = True
             client.send_message(
                 chat_id,
-                f'💩{round(gold_one_current, 1)}(🔻 -{round(gold_one_price_difference, 1)}$)'
+                f'💩{round(goldandsilver_am_current, 1)}(🔻 -{round(goldandsilver_am_difference, 1)}$)'
             )
 
         else:
