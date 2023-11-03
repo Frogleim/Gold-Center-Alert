@@ -8,6 +8,7 @@ return_response = ''
 current_price = None
 price_difference = 0.0
 price_threshold = 0.1
+gold_price = None
 
 
 def get_price():
